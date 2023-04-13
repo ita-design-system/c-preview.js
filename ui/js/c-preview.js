@@ -1,15 +1,15 @@
 // IPREVIEW
 // A JS library to display data from input type=file
-const ipreview = {
+const cPreview = {
     reset: function(input_id) {
         if (typeof input_id == 'string') {
             const el_input_file_target = document.getElementById(input_id);
-            const el_ipreview_container = document.querySelector('[data-ipreview="'+input_id+'"]');
+            const el_cpreview_container = document.querySelector('[data-cpreview="'+input_id+'"]');
             if (el_input_file_target !== null) {
                 el_input_file_target.value = '';
             }
-            if (el_ipreview_container !== null) {
-                el_ipreview_container.innerHTML = '';
+            if (el_cpreview_container !== null) {
+                el_cpreview_container.innerHTML = '';
             }
         }
     },
@@ -28,29 +28,29 @@ const ipreview = {
     },
     // Remove a file from input and preview
     remove: function(el, file_name) {
-        const el_ipreview_container = el.closest('[data-ipreview]');
-        const el_ipreview_item = el.closest('.ipreview-item');
-        const input_file_id = el_ipreview_container.dataset.ipreview;
+        const el_cpreview_container = el.closest('[data-cpreview]');
+        const el_cpreview_item = el.closest('.cpreview-item');
+        const input_file_id = el_cpreview_container.dataset.cpreview;
         let name = file_name;
         // Supprimer l'affichage du nom de fichier
-        el_ipreview_item.remove();
-        for (let i = 0; i < ipreview._dataTransfers[input_file_id].items.length; i++) {
+        el_cpreview_item.remove();
+        for (let i = 0; i < cPreview._dataTransfers[input_file_id].items.length; i++) {
             // Correspondance du fichier et du nom
-            if(name === ipreview._dataTransfers[input_file_id].items[i].getAsFile().name) {
+            if(name === cPreview._dataTransfers[input_file_id].items[i].getAsFile().name) {
                 // Suppression du fichier dans l'objet DataTransfer
-                ipreview._dataTransfers[input_file_id].items.remove(i);
+                cPreview._dataTransfers[input_file_id].items.remove(i);
                 continue;
             }
         }
 
         const el_input_file = document.getElementById(input_file_id);
         // Mise à jour des fichiers de l'input file après suppression
-        el_input_file.files = ipreview._dataTransfers[input_file_id].files; 
+        el_input_file.files = cPreview._dataTransfers[input_file_id].files; 
         // If no more file, remove reset button
         if (el_input_file.files.length == 0) {
-            const el_ipreview_remove_all = el_ipreview_container.querySelector('.ipreview-remove');
-            if (el_ipreview_remove_all !== null) {
-                el_ipreview_remove_all.remove();
+            const el_cpreview_remove_all = el_cpreview_container.querySelector('.cpreview-remove');
+            if (el_cpreview_remove_all !== null) {
+                el_cpreview_remove_all.remove();
             }
         }
     },
@@ -71,7 +71,7 @@ const ipreview = {
                     if (typeof data.id == 'string' && typeof data.el_target_container == 'object') {
                         data.el_target_container.insertAdjacentHTML(
                             'beforeend',
-                            `<button onclick="ipreview.reset('${data.id}')">Remove all</button>`
+                            `<button onclick="cPreview.reset('${data.id}')">Remove all</button>`
                         );
                     }
                 }
@@ -93,9 +93,9 @@ const ipreview = {
                         el_item.innerHTML = `
                         <ul>
                             <li>File name: ${data.el_file.name}</li>
-                            <li>Size: ${ipreview.formatBytes(data.e.loaded)}</li>
+                            <li>Size: ${cPreview.formatBytes(data.e.loaded)}</li>
                             <li>Type: ${data.el_file.type}</li>
-                            <li><button onclick="ipreview.remove(this, '${data.el_file.name}')">Supprimer</button></li>
+                            <li><button onclick="cPreview.remove(this, '${data.el_file.name}')">Supprimer</button></li>
                         </ul>`;
                         // Insert file markup
                         data.el_target_container.appendChild(el_item);
@@ -106,13 +106,13 @@ const ipreview = {
     },
     update: function(el) {
         if (typeof el == 'object') {
-            // Container element [data-ipreview="<ID_OF_INPUT_FILE>"]
-            const el_target_container = document.querySelector('[data-ipreview="'+el.id+'"]');
+            // Container element [data-cpreview="<ID_OF_INPUT_FILE>"]
+            const el_target_container = document.querySelector('[data-cpreview="'+el.id+'"]');
             if (el_target_container !== null && el.files.length > 0) {
                 el_target_container.innerHTML = '';
                 // Remove files/reset command
                 // Get user defined template
-                const user_defined_reset_template_name = el_target_container.dataset.ipreviewTemplateReset;
+                const user_defined_reset_template_name = el_target_container.dataset.cpreviewTemplateReset;
                 // Arguments to send to template generator
                 const reset_data = {
                     el_target_container: el_target_container,
@@ -122,33 +122,33 @@ const ipreview = {
                 // If valid reset template
                 let valid_user_defined_reset_template_name = false;
                 if (user_defined_reset_template_name !== undefined) {
-                    if (typeof ipreviewTemplates == 'object') {
-                        if (typeof ipreviewTemplates.reset == 'object') {
-                            if (typeof ipreviewTemplates.reset[user_defined_reset_template_name] == 'function') {
+                    if (typeof cPreviewTemplates == 'object') {
+                        if (typeof cPreviewTemplates.reset == 'object') {
+                            if (typeof cPreviewTemplates.reset[user_defined_reset_template_name] == 'function') {
                                 valid_user_defined_reset_template_name = true;
-                                ipreviewTemplates.reset[user_defined_reset_template_name](reset_data);
+                                cPreviewTemplates.reset[user_defined_reset_template_name](reset_data);
                             }
                         }
                     }
                 }
                 // If no valid custom template, use default
                 if (!valid_user_defined_reset_template_name) {
-                    ipreview.templates.reset.default(reset_data);
+                    cPreview.templates.reset.default(reset_data);
                     // console.log('no valid reset template, using default');
                 }
                 // To handle add/remove on input type file woth multiple attribute
-                ipreview._dataTransfers[el.id] = new DataTransfer();
+                cPreview._dataTransfers[el.id] = new DataTransfer();
                 // Create thumbs/files items
                 for (let el_file of el.files) {
                     // Add current file into its own DataTransfer
-                    ipreview._dataTransfers[el.id].items.add(el_file);
+                    cPreview._dataTransfers[el.id].items.add(el_file);
                     // Sync input file
-                    el.files = ipreview._dataTransfers[el.id].files;
+                    el.files = cPreview._dataTransfers[el.id].files;
                     // Init file reader for images
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         // Get user defined template
-                        const user_defined_file_template_name = el_target_container.dataset.ipreviewTemplateFile;
+                        const user_defined_file_template_name = el_target_container.dataset.cpreviewTemplateFile;
                         // Arguments to send to template generator
                         const file_data = {
                             el_target_container: el_target_container,
@@ -158,27 +158,27 @@ const ipreview = {
                         // If valid file template
                         let valid_user_defined_file_template_name = false;
                         if (user_defined_file_template_name !== undefined) {
-                            if (typeof ipreviewTemplates == 'object') {
-                                if (typeof ipreviewTemplates.file == 'object') {
-                                    if (typeof ipreviewTemplates.file[user_defined_file_template_name] == 'function') {
+                            if (typeof cPreviewTemplates == 'object') {
+                                if (typeof cPreviewTemplates.file == 'object') {
+                                    if (typeof cPreviewTemplates.file[user_defined_file_template_name] == 'function') {
                                         valid_user_defined_file_template_name = true;
-                                        ipreviewTemplates.file[user_defined_file_template_name](file_data);
+                                        cPreviewTemplates.file[user_defined_file_template_name](file_data);
                                     }
                                 }
                             }
                         }
                         // If no valid custom template, use default
                         if (!valid_user_defined_file_template_name) {
-                            ipreview.templates.file.default(file_data);
+                            cPreview.templates.file.default(file_data);
                             // console.log('no valid file template, using default');
                         }
                         // Mark each file item with a specific class
                         el_target_container.childNodes.forEach(function(el_target_item, item_index) {
                             // Avoid first child which is always the remove all files button
                             if (item_index == 0) {
-                                el_target_item.classList.add('ipreview-remove');
+                                el_target_item.classList.add('cpreview-remove');
                             } else {
-                                el_target_item.classList.add('ipreview-item');
+                                el_target_item.classList.add('cpreview-item');
                             }
                         });
                         // console.log(file_markup);
