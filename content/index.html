@@ -1,0 +1,88 @@
+---
+layout: libdoc/page-codemirror
+permalink: index.html
+unlisted: true
+---
+<div class="c-dis m-flex
+    c-pos m-relative
+    c-txt m-ta-center">
+    <input type="file"
+        id="id_file_input"
+        class="
+        c-dim m-w-100 m-h-100
+        c-pos m-absolute m-top-0 m-left-0
+        c-skin m-cur-pointer"
+        onchange="ipreview.update(this)"
+        accept="image/*;capture=camera"
+        multiple>
+
+    <label for="id_file_input"
+        class="
+        c-dis m-flex m-column m-cross-center m-main-center m-gap-3
+        c-pos m-relative 
+        c-dim m-w-100 m-p-8
+        c-skin m-bc-primary-100 m-c-primary-800 m-brad-2 m-pe-none"
+        style="border: 2px dashed var(--ita-color-primary-500)">
+        <span class="c-dis m-flex m-column m-gap-3 m-cross-center">
+            Glisser déposer ou sélectionner
+        </span>
+        <span class="
+            c-dis m-flex m-main-center m-cross-baseline m-gap-3 m-wrap
+            c-txt m-fs-3 m-ta-center">
+            <strong class="c-dis m-flex m-column m-cross-center m-gap-1">
+                <span class="c-txt m-ff-lead-400 m-fs-2 m-tt-uppercase">Extensions autorisées</span>
+                <span class="
+                    c-dis m-flex m-gap-1
+                    c-txt m-ff-lead-700">
+                    <span class="
+                        c-dim m-p-1
+                        c-skin m-bc-primary-200 m-c-primary-900 m-brad-1">
+                        .jpeg
+                    </span>
+                    <span class="
+                        c-dim m-p-1
+                        c-skin m-bc-primary-200 m-c-primary-900 m-brad-1">
+                        .jpg
+                    </span>
+                    <span class="
+                        c-dim m-p-1
+                        c-skin m-bc-primary-200 m-c-primary-900 m-brad-1">
+                        .png
+                    </span>
+                    <span class="
+                        c-dim m-p-1
+                        c-skin m-bc-primary-200 m-c-primary-900 m-brad-1">
+                        .webp
+                    </span>
+                </span>
+            </strong>
+            <strong class="c-dis m-flex m-column m-cross-center m-gap-1">
+                <span class="c-txt m-ff-lead-400 m-fs-2 m-tt-uppercase m-lh-2">Taille max.</span>
+                <span class="c-txt m-ff-lead-700">10 Mo</span>
+            </strong>
+            <strong class="c-dis m-flex m-column m-cross-center m-gap-1">
+                <span class="c-txt m-ff-lead-400 m-fs-2 m-tt-uppercase m-lh-2">Résolution min.</span>
+                <span class="c-txt m-ff-lead-700">5 Mpix</span>
+            </strong>
+        </span>
+    </label>
+</div>
+<!-- Conteneur médias sélectionnés -->
+<div class="
+    c-dis m-flex m-gap-3 
+    c-dim m-pt-6"
+    data-ipreview="id_file_input"
+    data-ipreview-template-file="foo"
+    data-ipreview-template-reset="foo"
+    data-ipreview-i18n="fr"></div>
+<!-- DEMO UNIQUEMENT -->
+<style>
+    body {
+        padding: var(--ita-spacing-4);
+        color: var(--ita-color-primary-800);
+        font-family: var(--ita-font-family-mono);
+        font-size: 1rem;
+        line-height: 1.5rem;
+        padding-bottom: 50vh;
+    }
+</style>
