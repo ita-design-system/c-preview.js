@@ -10,32 +10,22 @@ let cPreviewTemplates = {
         foo: function(data) {
             if (typeof data == 'object') {
                 if (typeof data.id == 'string' && typeof data.el_target_container == 'object') {
-                    const current_lang = data.el_target_container.dataset.cpreviewI18n;
+                    const current_lang = data.el_target_container.dataset.cPreviewI18n;
                     data.el_target_container.insertAdjacentHTML(
                         'beforeend',
                         `<nav class="c-dim m-w-100 cpreview-remove">
-                            <span class="c-btn m-gap-3 u-c-primary-500 u-p-0" 
+                            <span class="
+                                c-dis m-flex m-cross-center m-gap-2
+                                c-skin m-c-support-danger-500 m-cur-pointer" 
                                 onclick="cPreview.reset('${data.id}')">
-                                <span class="icon-x u-fs-8"></span> 
-                                ${cPreviewTemplates.getLanguageString('remove_all', current_lang) || 'Tout retirer'}
+                                &times;
+                                ${cPreview.getLanguageString('remove_all', current_lang) || 'Remove all'}
                             </span>
                         </nav>`
                     );
                 }
             }
         }
-    },
-    // Get optional language
-    getLanguageString: function(token, current_lang) {
-        let result = undefined;
-        if (typeof current_lang == 'string' && typeof token == 'string') {
-            if (typeof cpreviewI18n == 'object') {
-                if (typeof cpreviewI18n[current_lang][token] == 'string') {
-                    result = cpreviewI18n[current_lang][token];
-                }
-            }
-        }
-        return result;
     },
     file: {
         /**
@@ -52,39 +42,50 @@ let cPreviewTemplates = {
                     const blob_url = URL.createObjectURL(data.el_file);
                     // Create thumb item
                     const el_item = document.createElement('div');
-                    el_item.setAttribute('class', 'c-flex m-column m-main-space-between m-g12 c-dim m-o-hidden cpreview-item');
-                    el_item.setAttribute('m-w-4tg32', 'md,lg,xl');
-                    el_item.setAttribute('m-maxw-300px', 'md,lg,xl');
-                    el_item.setAttribute('m-w-6tg32', 'sm');
+                    el_item.setAttribute('class', 'c-dis m-flex m-column m-main-space-between m-gap-3 c-dim m-o-hidden cpreview-item');
+                    el_item.setAttribute('m-w-4t', 'md,lg,xl');
+                    el_item.setAttribute('m-w-6t', 'sm');
                     el_item.setAttribute('m-w-100', 'xs');
                     // Get optional current language
                     const current_lang = data.el_target_container.dataset.cpreviewI18n;
                     
                     el_item.innerHTML = `
-                    <picture class="c-flex m-main-center m-cross-center c-dim m-w-100 m-o-hidden c-bg m-asset-damier"></picture>
-                    <ul class="c-flex m-column c-txt m-fs-4 u-ls-none u-m-0 u-p-0 main-data">
-                        <li class="c-dim m-order--1 c-flex m-main-space-between m-nowrap m-g12 u-pt-2 u-pb-2 u-bb-thin-neutral-800">
-                            ${cPreviewTemplates.getLanguageString('file_name', current_lang) || 'Nom de fichier'}
+                    <picture class="
+                        c-dis m-flex m-main-center m-cross-center
+                        c-dim m-w-100 m-o-hidden"></picture>
+                    <ul class="
+                        c-dis m-flex m-column
+                        c-dim m-m-0 m-p-0
+                        c-txt m-fs-4
+                        c-skin m-ls-none main-data">
+                        <li class="
+                            c-dis m-flex m-main-space-between m-gap-3
+                            c-dim m-order--1">
+                            ${cPreview.getLanguageString('file_name', current_lang) || 'File name'}
                             <strong class="c-txt m-ff-lead-500 m-ta-right m-wb-break-word">
                                 ${data.el_file.name}
                             </strong>
                         </li>
-                        <li class="c-dim m-order--1 c-flex m-main-space-between m-nowrap m-g12 u-pt-2 u-pb-2 u-bb-thin-neutral-800">
-                            ${cPreviewTemplates.getLanguageString('file_size', current_lang) || 'Taille'}
+                        <li class="
+                            c-dis m-flex m-main-space-between m-gap-3
+                            c-dim m-order--1">
+                            ${cPreview.getLanguageString('file_size', current_lang) || 'File size'}
                             <strong class="c-txt m-ff-lead-500 m-ta-right m-wb-break-word">
                                 ${cPreview.formatBytes(data.e.loaded, null, current_lang)}
                             </strong>
                         </li>
-                        <li class="c-dim m-order--1 c-flex m-main-space-between m-nowrap m-g12 u-pt-2 u-pb-2 u-bb-thin-neutral-800">
-                            ${cPreviewTemplates.getLanguageString('file_type', current_lang) || 'Format'}
+                        <li class="
+                            c-dis m-flex m-main-space-between m-gap-3
+                            c-dim m-order--1">
+                            ${cPreview.getLanguageString('file_type', current_lang) || 'File type'}
                             <strong class="c-txt m-ff-lead-500 m-ta-right m-wb-break-word">
                                 ${data.el_file.type}
                             </strong>
                         </li>
-                        <li class="c-flex m-g12 u-pt-2 u-pb-2 u-bb-thin-neutral-800">
+                        <li class="c-dis m-flex m-main-space-between m-gap-3">
                             <span onclick="cPreview.remove(this, '${data.el_file.name}')"
-                                class="c-txt u-c-support-danger-500 u-cur-pointer">
-                                ${cPreviewTemplates.getLanguageString('remove', current_lang) || 'Supprimer'}
+                                class="c-skin m-c-support-danger-500 m-cur-pointer">
+                                ${cPreview.getLanguageString('remove', current_lang) || 'Remove'}
                             </span>
                         </li>
                     </ul>`;
@@ -94,8 +95,9 @@ let cPreviewTemplates = {
                     // If file is an image or video
                     if (data.el_file.type.indexOf('image/') == 0 || data.el_file.type.indexOf('video/') == 0) {
                         el_picture.innerHTML = `
-                        <div class="c-dim m-order--1 u-m-6 u-p-3 u-brad-3 u-bt-thin-primary-500 u-br-thin-primary-500 u-bb-thin-primary-500"
-                            style="animation: rotate 1s 0s linear infinite;"></div>`;
+                        <div class="
+                            c-dim m-order--1 m-m-6 m-p-3
+                            c-skin m-brad-3"></div>`;
                         // Create thumb image item
                         let el_image = document.createElement('img');
                         if (data.el_file.type.indexOf('video/') == 0) {
@@ -109,11 +111,9 @@ let cPreviewTemplates = {
                             if ((el_image.naturalWidth > 0 && el_image.naturalHeight > 0) || data.el_file.type == 'image/svg+xml' || data.el_file.type.indexOf('video/') == 0) {
 
                                 const image_definition = el_image.naturalWidth * el_image.naturalHeight;
-                                let image_definition_status_class = 'u-c-support-success-400';
-                                let image_definition_status_icon_class = 'icon-check-circle';
+                                let image_definition_status_class = 'c-skin m-c-support-success-400';
                                 if (image_definition < 5000000) {
                                     image_definition_status_class = 'u-c-support-warning-400';
-                                    image_definition_status_icon_class = 'icon-alert-triangle';
                                 }
                                 el_image.classList.add('c-dim', 'm-w-100', 'm-h-auto');
                                 el_image.setAttribute('alt', data.el_file.name);
@@ -122,10 +122,12 @@ let cPreviewTemplates = {
                                 el_item.querySelector('.main-data').insertAdjacentHTML(
                                     'beforeend',
                                     `
-                                        <li class="c-dim m-order--1 c-flex m-main-space-between m-nowrap m-g12 u-pt-2 u-pb-2 u-bb-thin-neutral-800 ${image_definition_status_class}">
-                                            ${cPreviewTemplates.getLanguageString('definition', current_lang) || 'Définition'}
+                                        <li class="
+                                            c-dis m-flex m-main-space-between m-gap-3
+                                            c-dim m-order--1
+                                            ${image_definition_status_class}">
+                                            ${cPreview.getLanguageString('definition', current_lang) || 'Definition'}
                                             <strong class="c-txt m-ff-lead-500 m-ta-right">
-                                                <span class="${image_definition_status_icon_class}"></span>
                                                 <span>${el_image.naturalWidth || el_image.videoWidth}</span> x <span>${el_image.naturalHeight || el_image.videoHeight}</span> px
                                             </strong>
                                         </li>
@@ -135,8 +137,13 @@ let cPreviewTemplates = {
                             }
                         }, 500);
                     } else {
-                        el_picture.setAttribute('class', 'c-flex m-main-center m-cross-center c-dim m-w-100 m-o-hidden u-pt-6 u-pb-6 u-c-primary-500 u-bc-primary-900 u-brad-1');
-                        el_picture.innerHTML = `<span class="icon-file-text u-fs-14"></span>`;
+                        if (data.el_file.type == 'application/pdf' || data.el_file.type == 'text/html' || data.el_file.type == 'text/plain') {
+                            el_picture.setAttribute('class', 'c-dis m-flex m-main-center m-cross-center c-dim m-w-100 m-o-hidden c-skin m-c-primary-500 m-bc-primary-100 m-brad-1');
+                            el_picture.innerHTML = `<iframe src="${blob_url}" class="c-dim m-w-100 c-skin m-b-0" height="200"></iframe>`;
+                        } else {
+                            el_picture.setAttribute('class', 'c-dis m-flex m-main-center m-cross-center c-dim m-w-100 m-o-hidden m-pt-6 m-pb-6 c-skin m-c-primary-500 m-bc-primary-100 m-brad-1');
+                            el_picture.innerHTML = `<span class="c-txt m-fs-10">↥</span>`;
+                        }
                     }
                 }
             }

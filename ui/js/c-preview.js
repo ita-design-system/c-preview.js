@@ -54,6 +54,24 @@ const cPreview = {
             }
         }
     },
+    /**
+     * OPTIONAL LANGUAGE STRING METHOD
+     * @param {String} token token name of the translation string
+     * @param {String} current_lang language invoked 
+     * @return {String} for a valid token + language or {undefined} is not
+     * More info at https://github.com/ita-design-system/c-preview.js
+     */
+    getLanguageString: function(token, current_lang) {
+        let result = undefined;
+        if (typeof current_lang == 'string' && typeof token == 'string') {
+            if (typeof cPreviewI18n == 'object') {
+                if (typeof cPreviewI18n[current_lang][token] == 'string') {
+                    result = cPreviewI18n[current_lang][token];
+                }
+            }
+        }
+        return result;
+    },
     // DataTransfer to handle files
     // One dataTransfer / input file
     _dataTransfers: {},
@@ -69,9 +87,10 @@ const cPreview = {
             default: function(data) {
                 if (typeof data == 'object') {
                     if (typeof data.id == 'string' && typeof data.el_target_container == 'object') {
+                        const current_lang = data.el_target_container.dataset.cpreviewI18n;
                         data.el_target_container.insertAdjacentHTML(
                             'beforeend',
-                            `<button onclick="cPreview.reset('${data.id}')">Remove all</button>`
+                            `<button onclick="cPreview.reset('${data.id}')">${cPreview.getLanguageString('remove_all', current_lang) || 'Remove all'}</button>`
                         );
                     }
                 }
@@ -90,12 +109,17 @@ const cPreview = {
                     if (typeof data.e == 'object' && typeof data.el_file == 'object' && typeof data.el_target_container == 'object') {
                         // Create thumb item
                         const el_item = document.createElement('div');
+                        const current_lang = data.el_target_container.dataset.cpreviewI18n;
                         el_item.innerHTML = `
                         <ul>
-                            <li>File name: ${data.el_file.name}</li>
-                            <li>Size: ${cPreview.formatBytes(data.e.loaded)}</li>
-                            <li>Type: ${data.el_file.type}</li>
-                            <li><button onclick="cPreview.remove(this, '${data.el_file.name}')">Supprimer</button></li>
+                            <li>${cPreview.getLanguageString('file_name', current_lang) || 'File name'}: ${data.el_file.name}</li>
+                            <li>${cPreview.getLanguageString('file_size', current_lang) || 'File size'}: ${cPreview.formatBytes(data.e.loaded)}</li>
+                            <li>${cPreview.getLanguageString('file_type', current_lang) || 'File type'}: ${data.el_file.type}</li>
+                            <li>
+                                <button onclick="cPreview.remove(this, '${data.el_file.name}')">
+                                    ${cPreview.getLanguageString('remove', current_lang) || 'Remove'}
+                                </button>
+                            </li>
                         </ul>`;
                         // Insert file markup
                         data.el_target_container.appendChild(el_item);

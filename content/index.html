@@ -3,8 +3,15 @@ layout: libdoc/page-codemirror
 permalink: index.html
 unlisted: true
 ---
+<input type="file" id="test" onchange="cPreview.update(this)" multiple>
+<div data-cpreview="test"></div>
+
+<input type="file" id="test2" onchange="cPreview.update(this)" multiple>
+<div data-cpreview="test2" data-cpreview-i18n="fr"></div>
+
 <div class="c-dis m-flex
     c-pos m-relative
+    c-dim m-mb-6
     c-txt m-ta-center">
     <input type="file"
         id="id_file_input"
@@ -68,9 +75,7 @@ unlisted: true
     </label>
 </div>
 <!-- Conteneur médias sélectionnés -->
-<div class="
-    c-dis m-flex m-gap-3 
-    c-dim m-pt-6"
+<div class="c-dis m-flex m-wrap m-gap-3"
     data-cpreview="id_file_input"
     data-cpreview-template-file="foo"
     data-cpreview-template-reset="foo"
