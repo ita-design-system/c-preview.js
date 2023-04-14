@@ -63,7 +63,7 @@ sidebar:
         #font_size: 32px
     # Display additional links anywhere into the sidebar
     additional_links:
-        -   url: https://github.com/ita-design-system/c-toggle.js # Local or remote URL
+        -   url: https://github.com/ita-design-system/c-preview.js # Local or remote URL
             title: <span class="i-github u-mr-xxs"></span> Voir sur GitHub # Link text
             order: 0 # Sets the rank of the page link into the sidebar, higher values give lower rank for the page link
             separator: false
