@@ -38,8 +38,8 @@ https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@<TAG_VERSION>/ui/js/c
     <script src="https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js/ui/js/c-preview.min.js"></script>
 
     <!-- Exemple avec numéro de version -->
-    <script src="https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@v0.1.0/ui/js/c-preview-templates.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@v0.1.0/ui/js/c-preview.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@v0.2.0/ui/js/c-preview-templates.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@v0.2.0/ui/js/c-preview.min.js"></script>
 </body>
 ```
 
