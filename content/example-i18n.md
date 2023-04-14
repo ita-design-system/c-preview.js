@@ -1,4 +1,24 @@
-// Optional i18n for c-preview.js
+---
+title: Langues
+description: Exemple avec langue personnalisée
+layout: libdoc/page-split
+category: Exemples
+order: 20
+---
+
+```html
+<input type="file" id="first" multiple>
+<div data-cpreview="first"
+    data-cpreview-i18n="fr"></div>
+```
+{:.playground title="Exemple avec langue personnalisée"}
+
+Quand l'attribut `data-cpreview-i18n="TOKEN_LANGUAGE"` est renseigné, cPreview invoque `cPreviewI18n[TOKEN_LANGUAGE][TOKEN_STRING]` pour en obtenir la chaine de caractères de la langue spécifiée. Si elle n'existe pas, la valeur par défaut (anglais) est affichée.
+
+Pour ajouter les traductions, ajouter un object JS nommé `cPreviewI18n` contenant les tokens des chaines de caractères suivants:
+
+```javascript
+// Objet langues optionnel
 const cPreviewI18n = {
     fr: {
         file_name: "Nom du fichier",
@@ -35,3 +55,5 @@ const cPreviewI18n = {
         bytes_8: "YB"
     }
 }
+```
+

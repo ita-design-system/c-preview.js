@@ -1,6 +1,11 @@
 // IPREVIEW
 // A JS library to display data from input type=file
 const cPreview = {
+    /**
+     * RESET METHOD
+     * Remove all files from the specified input type file
+     * @param {String} input_id token name of the translation string
+     */
     reset: function(input_id) {
         if (typeof input_id == 'string') {
             const el_input_file_target = document.getElementById(input_id);
@@ -15,16 +20,14 @@ const cPreview = {
     },
     // Bytes user friendly display 
     // Based on https://stackoverflow.com/a/18650828
-    formatBytes: function(bytes, decimals = 2, lang = 'fr') {
-        const sizes = {
-            fr: ['Octets', 'Ko', 'Mo', 'Go', 'To', 'Po', 'Eo', 'Zo', 'Yo'],
-            en: ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-        }
+    formatBytes: function(bytes, lang = 'en', decimals = 2) {
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         if (!+bytes) return '0';
         const k = 1024;
         const dm = decimals < 0 ? 0 : decimals;
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[lang][i]}`
+        const text = cPreview.getLanguageString('bytes_'+i, lang) || sizes[i];
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${text}`
     },
     // Remove a file from input and preview
     remove: function(el, file_name) {
@@ -85,15 +88,11 @@ const cPreview = {
              * @param {String} data.id input type file id to reset
              */
             default: function(data) {
-                if (typeof data == 'object') {
-                    if (typeof data.id == 'string' && typeof data.el_target_container == 'object') {
-                        const current_lang = data.el_target_container.dataset.cpreviewI18n;
-                        data.el_target_container.insertAdjacentHTML(
-                            'beforeend',
-                            `<button onclick="cPreview.reset('${data.id}')">${cPreview.getLanguageString('remove_all', current_lang) || 'Remove all'}</button>`
-                        );
-                    }
-                }
+                const current_lang = data.el_target_container.dataset.cpreviewI18n;
+                data.el_target_container.insertAdjacentHTML(
+                    'beforeend',
+                    `<nav style="width:100%"><button onclick="cPreview.reset('${data.id}')">${cPreview.getLanguageString('remove_all', current_lang) || 'Remove all'}</button></nav>`
+                );
             }
         },
         file: {
@@ -105,112 +104,118 @@ const cPreview = {
              * @param {Object} data.el_file File List element
              */
             default: function(data) {
-                if (typeof data == 'object') {
-                    if (typeof data.e == 'object' && typeof data.el_file == 'object' && typeof data.el_target_container == 'object') {
-                        // Create thumb item
-                        const el_item = document.createElement('div');
-                        const current_lang = data.el_target_container.dataset.cpreviewI18n;
-                        el_item.innerHTML = `
-                        <ul>
-                            <li>${cPreview.getLanguageString('file_name', current_lang) || 'File name'}: ${data.el_file.name}</li>
-                            <li>${cPreview.getLanguageString('file_size', current_lang) || 'File size'}: ${cPreview.formatBytes(data.e.loaded)}</li>
-                            <li>${cPreview.getLanguageString('file_type', current_lang) || 'File type'}: ${data.el_file.type}</li>
-                            <li>
-                                <button onclick="cPreview.remove(this, '${data.el_file.name}')">
-                                    ${cPreview.getLanguageString('remove', current_lang) || 'Remove'}
-                                </button>
-                            </li>
-                        </ul>`;
-                        // Insert file markup
-                        data.el_target_container.appendChild(el_item);
-                    }
-                }
+                // Create thumb item
+                const el_item = document.createElement('div');
+                const current_lang = data.el_target_container.dataset.cpreviewI18n;
+                el_item.innerHTML = `
+                <ul>
+                    <li>${cPreview.getLanguageString('file_name', current_lang) || 'File name'}: ${data.el_file.name}</li>
+                    <li>${cPreview.getLanguageString('file_size', current_lang) || 'File size'}: ${cPreview.formatBytes(data.e.loaded, current_lang)}</li>
+                    <li>${cPreview.getLanguageString('file_type', current_lang) || 'File type'}: ${data.el_file.type}</li>
+                    <li>
+                        <button onclick="cPreview.remove(this, '${data.el_file.name}')">
+                            ${cPreview.getLanguageString('remove', current_lang) || 'Remove'}
+                        </button>
+                    </li>
+                </ul>`;
+                // Insert file markup
+                data.el_target_container.appendChild(el_item);
             }
         }
     },
-    update: function(el) {
-        if (typeof el == 'object') {
-            // Container element [data-cpreview="<ID_OF_INPUT_FILE>"]
-            const el_target_container = document.querySelector('[data-cpreview="'+el.id+'"]');
-            if (el_target_container !== null && el.files.length > 0) {
-                el_target_container.innerHTML = '';
-                // Remove files/reset command
-                // Get user defined template
-                const user_defined_reset_template_name = el_target_container.dataset.cpreviewTemplateReset;
-                // Arguments to send to template generator
-                const reset_data = {
-                    el_target_container: el_target_container,
-                    id: el.id
-                }
+    /**
+     * HANDLER METHOD FOR INPUT FILE CHANGE
+     * Job to do on each elligible input type file
+     * @param {Object} e - Event sent by input 
+     */
+    _run: function(e) {
+        // Input file element
+        const el = e.target;
+        // Container element [data-cpreview="<ID_OF_INPUT_FILE>"]
+        const el_target_container = document.querySelector('[data-cpreview="'+el.id+'"]');
+        if (el.files.length > 0 && el_target_container !== null) {
+            el_target_container.innerHTML = '';
+            // Remove files/reset command
+            // Get user defined template
+            const user_defined_reset_template_name = el_target_container.dataset.cpreviewTemplateReset;
+            // Arguments to send to template generator
+            const reset_data = {
+                el_target_container: el_target_container,
+                id: el.id
+            }
 
-                // If valid reset template
-                let valid_user_defined_reset_template_name = false;
-                if (user_defined_reset_template_name !== undefined) {
-                    if (typeof cPreviewTemplates == 'object') {
-                        if (typeof cPreviewTemplates.reset == 'object') {
-                            if (typeof cPreviewTemplates.reset[user_defined_reset_template_name] == 'function') {
-                                valid_user_defined_reset_template_name = true;
-                                cPreviewTemplates.reset[user_defined_reset_template_name](reset_data);
-                            }
+            // If valid reset template
+            let valid_user_defined_reset_template_name = false;
+            if (user_defined_reset_template_name !== undefined) {
+                if (typeof cPreviewTemplates == 'object') {
+                    if (typeof cPreviewTemplates.reset == 'object') {
+                        if (typeof cPreviewTemplates.reset[user_defined_reset_template_name] == 'function') {
+                            valid_user_defined_reset_template_name = true;
+                            cPreviewTemplates.reset[user_defined_reset_template_name](reset_data);
                         }
                     }
                 }
-                // If no valid custom template, use default
-                if (!valid_user_defined_reset_template_name) {
-                    cPreview.templates.reset.default(reset_data);
-                    // console.log('no valid reset template, using default');
-                }
-                // To handle add/remove on input type file woth multiple attribute
-                cPreview._dataTransfers[el.id] = new DataTransfer();
-                // Create thumbs/files items
-                for (let el_file of el.files) {
-                    // Add current file into its own DataTransfer
-                    cPreview._dataTransfers[el.id].items.add(el_file);
-                    // Sync input file
-                    el.files = cPreview._dataTransfers[el.id].files;
-                    // Init file reader for images
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        // Get user defined template
-                        const user_defined_file_template_name = el_target_container.dataset.cpreviewTemplateFile;
-                        // Arguments to send to template generator
-                        const file_data = {
-                            el_target_container: el_target_container,
-                            el_file: el_file,
-                            e: e
-                        }
-                        // If valid file template
-                        let valid_user_defined_file_template_name = false;
-                        if (user_defined_file_template_name !== undefined) {
-                            if (typeof cPreviewTemplates == 'object') {
-                                if (typeof cPreviewTemplates.file == 'object') {
-                                    if (typeof cPreviewTemplates.file[user_defined_file_template_name] == 'function') {
-                                        valid_user_defined_file_template_name = true;
-                                        cPreviewTemplates.file[user_defined_file_template_name](file_data);
-                                    }
+            }
+            // If no valid custom template, use default
+            if (!valid_user_defined_reset_template_name) {
+                cPreview.templates.reset.default(reset_data);
+                // console.log('no valid reset template, using default');
+            }
+            // To handle add/remove on input type file woth multiple attribute
+            cPreview._dataTransfers[el.id] = new DataTransfer();
+            // Create thumbs/files items
+            for (let el_file of el.files) {
+                // Add current file into its own DataTransfer
+                cPreview._dataTransfers[el.id].items.add(el_file);
+                // Sync input file
+                el.files = cPreview._dataTransfers[el.id].files;
+                // Init file reader for images
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Get user defined template
+                    const user_defined_file_template_name = el_target_container.dataset.cpreviewTemplateFile;
+                    // Arguments to send to template generator
+                    const file_data = {
+                        el_target_container: el_target_container,
+                        el_file: el_file,
+                        e: e
+                    }
+                    // If valid file template
+                    let valid_user_defined_file_template_name = false;
+                    if (user_defined_file_template_name !== undefined) {
+                        if (typeof cPreviewTemplates == 'object') {
+                            if (typeof cPreviewTemplates.file == 'object') {
+                                if (typeof cPreviewTemplates.file[user_defined_file_template_name] == 'function') {
+                                    valid_user_defined_file_template_name = true;
+                                    cPreviewTemplates.file[user_defined_file_template_name](file_data);
                                 }
                             }
                         }
-                        // If no valid custom template, use default
-                        if (!valid_user_defined_file_template_name) {
-                            cPreview.templates.file.default(file_data);
-                            // console.log('no valid file template, using default');
-                        }
-                        // Mark each file item with a specific class
-                        el_target_container.childNodes.forEach(function(el_target_item, item_index) {
-                            // Avoid first child which is always the remove all files button
-                            if (item_index == 0) {
-                                el_target_item.classList.add('cpreview-remove');
-                            } else {
-                                el_target_item.classList.add('cpreview-item');
-                            }
-                        });
-                        // console.log(file_markup);
                     }
-                    // Convert to base64 string
-                    reader.readAsDataURL(el_file);
-                };
-            }
+                    // If no valid custom template, use default
+                    if (!valid_user_defined_file_template_name) {
+                        cPreview.templates.file.default(file_data);
+                        // console.log('no valid file template, using default');
+                    }
+                    // Mark each file item with a specific class
+                    el_target_container.childNodes.forEach(function(el_target_item, item_index) {
+                        // Avoid first child which is always the remove all files button
+                        if (item_index == 0) {
+                            el_target_item.classList.add('cpreview-remove');
+                        } else {
+                            el_target_item.classList.add('cpreview-item');
+                        }
+                    });
+                }
+                // Convert to base64 string
+                reader.readAsDataURL(el_file);
+            };
         }
+    },
+    update: function() {
+        document.querySelectorAll('input[type="file"]').forEach(function(el) {
+            el.addEventListener('change', cPreview._run);
+        });
     }
 }
+cPreview.update();

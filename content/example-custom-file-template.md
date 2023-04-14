@@ -1,40 +1,25 @@
-// cpreview Templates
+---
+title: Template fichier personnalisé
+description: Personnalisation de la présentation de la sélection des fichiers
+layout: libdoc/page-split
+category: Exemples
+order: 40
+---
+
+```html
+<label for="first">Template fichier nommé "foo"</label>
+<input type="file" id="first" multiple>
+<div data-cpreview="first" data-cpreview-template-file="foo" class="c-dis m-flex m-gap-3 m-wrap"></div>
+```
+{:.playground title="Template fichier personnalisé"}
+
+Quand l'attribut `data-cpreview-template-file="TOKEN_TEMPLATE_FILE"` est renseigné, cPreview invoque `cPreviewTemplates[TOKEN_TEMPLATE_FILE]` et l'utilise pour générer le HTML du template fichiers sélectionnés.
+
+Pour ajouter un template de fichiers, ajouter une méthode dans l'objet `cPreviewTemplates.file[TOKEN_NOM_DU NOUVEAU_TEMPLATE]`, sur la base de l'exemple suivant:
+
+```javascript
+// cPreview Templates optionnels
 let cPreviewTemplates = {
-    reset: {
-        /**
-         * CUSTOM TEMPLATE FOR "REMOVE ALL" FILES BUTTON
-         * @param {Object} data 
-         * @param {Object} data.el_target_container DOM element if the file item
-         * @param {String} data.id input type file id to reset
-         */
-        foo: function(data) {
-            const current_lang = data.el_target_container.dataset.cPreviewI18n;
-            data.el_target_container.insertAdjacentHTML(
-                'beforeend',
-                `<nav class="c-dim m-w-100">
-                    <button class="
-                        c-dis m-flex m-cross-center m-gap-2
-                        c-dim m-p-3 m-pl-4 m-pr-4
-                        c-skin m-b-0 m-brad-1 m-bc-support-danger-100 m-c-support-danger-500 m-cur-pointer" 
-                        onclick="cPreview.reset('${data.id}')">
-                        &times;
-                        ${cPreview.getLanguageString('remove_all', current_lang) || 'Remove all'}
-                    </button>
-                </nav>`
-            );
-        },
-        minimal: function(data) {
-            const current_lang = data.el_target_container.dataset.cPreviewI18n;
-            data.el_target_container.insertAdjacentHTML(
-                'beforeend',
-                `<nav>
-                    <button onclick="cPreview.reset('${data.id}')" class="c-skin m-bc-0">
-                        ${cPreview.getLanguageString('remove_all', current_lang) || 'Remove all'}
-                    </button>
-                </nav>`
-            );
-        }
-    },
     file: {
         /**
          * CUSTOM TEMPLATE FOR FILE ITEM
@@ -147,12 +132,37 @@ let cPreviewTemplates = {
                     el_picture.setAttribute('class', 'c-dis m-flex m-main-center m-cross-center c-dim m-w-100 m-o-hidden c-skin m-c-primary-500 m-bc-primary-100 m-brad-1');
                     el_picture.innerHTML = `<iframe src="${blob_url}" class="c-dim m-w-100 c-skin m-b-0" height="200"></iframe>`;
                 } else {
-                    const file_split = data.el_file.name.split('.');
-                    const file_extension = file_split[(file_split.length - 1)];
                     el_picture.setAttribute('class', 'c-dis m-flex m-main-center m-cross-center c-dim m-w-100 m-o-hidden m-pt-6 m-pb-6 c-skin m-c-primary-500 m-bc-primary-100 m-brad-1');
-                    el_picture.innerHTML = `<span class="c-txt m-fs-8">.${file_extension}</span>`;
+                    el_picture.innerHTML = `<span class="c-txt m-fs-10">↥</span>`;
                 }
             }
+        },
+        /**
+         * DEFAULT TEMPLATE FOR FILE ITEM
+         * @param {Object} data 
+         * @param {Object} data.el_target_container DOM element if the file item
+         * @param {Object} data.e Reader onload event
+         * @param {Object} data.el_file File List element
+         */
+        default: function(data) {
+            // Create thumb item
+            const el_item = document.createElement('div');
+            const current_lang = data.el_target_container.dataset.cpreviewI18n;
+            el_item.innerHTML = `
+            <ul>
+                <li>${cPreview.getLanguageString('file_name', current_lang) || 'File name'}: ${data.el_file.name}</li>
+                <li>${cPreview.getLanguageString('file_size', current_lang) || 'File size'}: ${cPreview.formatBytes(data.e.loaded, current_lang)}</li>
+                <li>${cPreview.getLanguageString('file_type', current_lang) || 'File type'}: ${data.el_file.type}</li>
+                <li>
+                    <button onclick="cPreview.remove(this, '${data.el_file.name}')">
+                        ${cPreview.getLanguageString('remove', current_lang) || 'Remove'}
+                    </button>
+                </li>
+            </ul>`;
+            // Insert file markup
+            data.el_target_container.appendChild(el_item);
         }
     }
 }
+```
+

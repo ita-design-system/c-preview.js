@@ -3,10 +3,10 @@ layout: libdoc/page-codemirror
 permalink: index.html
 unlisted: true
 ---
-<input type="file" id="test" onchange="cPreview.update(this)" multiple>
+<input type="file" id="test" multiple>
 <div data-cpreview="test"></div>
 
-<input type="file" id="test2" onchange="cPreview.update(this)" multiple>
+<input type="file" id="test2" multiple>
 <div data-cpreview="test2" data-cpreview-i18n="fr"></div>
 
 <div class="c-dis m-flex
@@ -19,7 +19,6 @@ unlisted: true
         c-dim m-w-100 m-h-100
         c-pos m-absolute m-top-0 m-left-0
         c-skin m-cur-pointer"
-        onchange="cPreview.update(this)"
         accept="image/*;capture=camera"
         multiple>
 
