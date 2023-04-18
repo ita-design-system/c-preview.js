@@ -24,11 +24,18 @@ via [https://www.jsdelivr.com/](https://www.jsdelivr.com/)
 <!-- Version la plus récente -->
 https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js/ui/js/c-preview.js
 
+<!-- Version la plus récente minifiée -->
+https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js/ui/js/c-preview.min.js
+
 <!-- Typologie avec numéro de version -->
 https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@<TAG_VERSION>/ui/js/c-preview.js
 
 <!-- Typologie numéro de version + minification automatique -->
 https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@<TAG_VERSION>/ui/js/c-preview.min.js
+
+<!-- Exemple v0.1.0 -->
+https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@v0.1.0/ui/js/c-preview.js
+https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@v0.1.0/ui/js/c-preview.min.js
 ```
 
 ```html
