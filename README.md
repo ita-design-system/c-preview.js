@@ -1,4 +1,7 @@
 # c-preview.js
+
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/ita-design-system/c-preview.js?style=for-the-badge)
+
 Librairie JS dédiée à l'affichage et des fichiers sélectionnés sur un input type="file"
 
 [Démo](https://ita-design-system.github.io/c-preview.js/)
