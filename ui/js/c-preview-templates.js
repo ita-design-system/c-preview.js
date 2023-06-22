@@ -8,7 +8,7 @@ let cPreviewTemplates = {
          * @param {String} data.id input type file id to reset
          */
         foo: function(data) {
-            const current_lang = data.el_target_container.dataset.cPreviewI18n;
+            const current_lang = data.el_target_container.dataset.cpreviewI18n;
             data.el_target_container.insertAdjacentHTML(
                 'beforeend',
                 `<nav class="c-dim m-w-100">
