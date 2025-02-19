@@ -1,4 +1,4 @@
-// IPREVIEW
+// CPREVIEW v0.2.2
 // A JS library to display data from input type=file
 const cPreview = {
     /**
@@ -198,14 +198,14 @@ const cPreview = {
                         // console.log('no valid file template, using default');
                     }
                     // Mark each file item with a specific class
-                    el_target_container.childNodes.forEach(function(el_target_item, item_index) {
+                    Object.keys(el_target_container.children).forEach(function(index) {
                         // Avoid first child which is always the remove all files button
-                        if (item_index == 0) {
-                            el_target_item.classList.add('cpreview-remove');
+                        if (index == '0') {
+                            el_target_container.children[index].classList.add('cpreview-remove');
                         } else {
-                            el_target_item.classList.add('cpreview-item');
+                            el_target_container.children[index].classList.add('cpreview-item');
                         }
-                    });
+                    })
                 }
                 // Convert to base64 string
                 reader.readAsDataURL(el_file);
