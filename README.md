@@ -5,8 +5,6 @@ layout: libdoc_page.liquid
 permalink: index.html
 date: git Last Modified
 ---
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ita-design-system/c-preview.js?style=for-the-badge)](https://github.com/ita-design-system/c-preview.js/releases)
-
 {% include 'sandbox' path: '/sandboxes/1/index.html', title: 'Démo c-preview.js' %}
 
 ## Installation

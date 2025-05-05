@@ -9,7 +9,7 @@
     <meta itemprop="name" content="c-preview.js">
     <meta name="description" itemprop="description" content="Documentation de la librairie c-preview.js dédiée à l’affichage et des fichiers sélectionnés sur un input type=file">
     <meta name="application-name" content="c-preview.js">
-    <meta name="author" content="Olivier 3lanc">
+    <meta name="author" content="ITADS">
     <link rel="icon" type="image/png" href="/c-preview.js/favicon.png">
     
     <meta name="msapplication-TileColor" content="#FFFFFF">
@@ -55,7 +55,13 @@
         :root {
             --ita-widths-sidebar: 300px;
             --ita-widths-content: 700px;
+            --ita-widths-main-container-max: calc(2 * var(--ita-widths-content) + var(--ita-widths-sidebar));
         }
+        
+            main img {
+                border-radius: 9px;
+            }
+        
     </style>
     <noscript>
         <link rel="stylesheet" href="/c-preview.js/core/assets/css/noscript.css">
@@ -115,8 +121,8 @@
         }
     </script>
 </head>
-<body class="d-flex fd-column | m-0">
-    <div class="d-flex" fd-column="xs,sm" ai-start="md" ai-center="xs,sm" pl-5="md">
+<body class="d-flex fd-column ai-center | m-0">
+    <div class="d-flex | w-100" fd-column="xs,sm" ai-start="md" ai-center="xs,sm" pl-5="md" style="max-width: var(--ita-widths-main-container-max)">
         <div class="d-flex fd-column | pos-sticky top-0 z-2" ai-center="xs,sm" w-100="xs,sm" w-sidebar="md">
             <nav id="nav_small_devices" class="d-flex | pos-fixed bottom-0 left-0 z-1 | w-100 h-60px" d-none="md">
                 <div class="d-flex jc-space-between | w-100 | bc-neutral-100 btwidth-1 btstyle-dashed bcolor-neutral-500">
@@ -124,6 +130,11 @@
                         <span class="icon-house fs-6"></span>
                         <span class="fvs-wght-400 fs-1 tt-uppercase">Accueil</span>
                     </a>
+                    
+                        <a href="/c-preview.js/search/" class="d-flex fd-column jc-center ai-center gap-1 | pl-2 pr-2 | td-none ta-center | c-primary-900 b-0 brad-3">
+                            <span class="icon-magnifying-glass fs-6"></span>
+                            <span class="fvs-wght-400 fs-1 tt-uppercase">Rechercher</span>
+                        </a>
                     
                     <button type="button" id="sd_floating_toc_toggle_btn" class="d-flex fd-column jc-center ai-center gap-1 | pl-2 pr-2 | ta-center | cur-pointer c-primary-900 bc-neutral-100 b-0 brad-3" disabled="">
                         <span class="icon-list-dashes fs-6"></span>
@@ -139,7 +150,7 @@
                     </button>
                 </div>
             </nav>
-            <nav id="nav_primary_container" class="d-flex d-none--xs d-none--sm fd-column | w-100 o-hidden | bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500" mt-5="md" maxw-sidebar="md" maxh-sidebar="md" h-sidebar="xs,sm" brad-3="md" c-toggle-name="nav_primary" data-opened-state-class="d-flex fd-column | w-100 o-hidden | bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500">
+            <nav id="nav_primary_container" class="d-flex d-none--xs d-none--sm fd-column | w-100 o-hidden | bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 |  __soft-shadow" mt-5="md" maxw-sidebar="md" maxh-sidebar="md" h-sidebar="xs,sm" brad-3="md" c-toggle-name="nav_primary" data-opened-state-class="d-flex fd-column | w-100 o-hidden | bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500">
                 <menu id="nav_primary_header" class="
                     d-flex fd-column
                     pos-sticky top-0 z-1
@@ -153,6 +164,23 @@
                             </a>
                         
                     </li>
+                    
+                        <li d-none="xs,sm">
+                            <form action="/c-preview.js/search/" class="d-flex fd-column | pos-relative | pl-5 pr-5 | search_form">
+                                <label for="searchInput" class="pos-absolute | ml-5 t-tY-50 | fvs-wght-400 fs-1 tt-uppercase | bc-neutral-100">
+                                    Rechercher
+                                </label>
+                                <input id="searchInput" type="search" name="search" class="pl-5 pr-5 pt-4 pb-4 | fs-3 | bc-neutral-100 brad-4 bwidth-1 bstyle-dashed bcolor-neutral-500" placeholder="Texte à rechercher" value="">
+                                <div class="d-flex ai-center gap-2 | pos-absolute top-0 right-0 | h-100 mr-5">
+                                    <button type="button" class="pos-relative | p-4 pr-5 | fs-3 | brad- bc-neutral-100 c-neutral-900 b-0 cur-pointer | search_form__clear_btn" title="Effacer la saisie" hidden="">
+                                        <span class="icon-x | pos-absolute top-50 left-50 t-tY-50 t-tX-50"></span>
+                                    </button>
+                                    <button type="submit" class="pos-relative | h-100 p-0 ar-square | fs-5 | brad-4 bc-primary-500 c-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-100 cur-pointer" title="Lancer la recherche">
+                                        <span class="icon-magnifying-glass | pos-absolute top-50 left-50 t-tY-50 t-tX-50"></span>
+                                    </button>
+                                </div>
+                            </form>
+                        </li>
                     
                     
                         <li class="d-flex ai-center fw-wrap gap-7 rgap-1 | pb-3 pl-4">
@@ -190,16 +218,20 @@
         </div>
         <main class="pos-relative" w-100-minus-sidebar="md" w-100="xs,sm">
             <header class="d-flex fd-column | pt-5 pb-7">
-                <ul class="d-flex ai-center gap-2 | p-0 m-0 o-auto | fs-2 lh-3 | ls-none">
+                <ul class="d-flex ai-center gap-2 | p-0 m-0 | fs-2 lh-3 | ls-none">
     <li class="d-flex ai-center gap-2">
-        <a href="/c-preview.js/" class="pos-relative | p-5 | fs-4 td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1" title="Page d’accueil">
+        <a href="/c-preview.js/" class="pos-relative | p-5 | fs-4 td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1 __soft-shadow" title="Page d’accueil">
             <span class="icon-house | pos-absolute top-50 left-50 t-tY-50 t-tX-50"></span>
         </a> /
     </li>
-    
-    
-    
-    <li class="c-neutral-800 ws-nowrap">c-preview.js</li>
+    <li class="o-auto">
+        <ul class="d-flex ai-center gap-2 | p-0 m-0 | fs-2 lh-3 | ls-none">
+            
+            
+            
+            <li class="c-neutral-800 ws-nowrap">c-preview.js</li>
+        </ul>
+    </li>
 </ul>
                 <h1 class="mt-3 mb-0 | lsp-5 fvs-wght-700 tws-balance " fs-10="md" fs-9="xs,sm">
                     c-preview.js
@@ -229,7 +261,7 @@
                                     <div class="icon-user | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-6"></div>
                                 </div>
                                 <p class="d-flex fd-column | m-0 | fvs-wght-400 fs-3 lsp-3 lh-3 | c-neutral-700 bc-primary-100" fs-2="xs" ws-nowrap="sm,md" style="min-width: 10ch">
-                                    Olivier 3lanc
+                                    ITADS
                                 </p>
                             </div>
                         
@@ -246,57 +278,56 @@
                             </span>
                         </summary>
                         
-                <ol class="cgap-3em | m-0 pl-0 pb-5 o-auto | lh-1 | ls-none bwidth-1 bstyle-dashed bcolor-neutral-500 btwidth-0 brwidth-0" d-flex="xs,sm" fd-column="xs,sm" fw-wrap="xs,sm" columns-3="md" columns-2="sm" maxh-300px="sm" maxh-200px="xs">
-                    <li class="d-flex">
-                        <a href="#installation" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
-                            Installation
-                        </a>
-                    </li>
-                    <li class="d-flex">
-                        <a href="#en-local" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
-                            En local
-                        </a>
-                    </li>
-                    <li class="d-flex">
-                        <a href="#sur-cdn" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
-                            Sur CDN
-                        </a>
-                    </li>
-                    <li class="d-flex">
-                        <a href="#usage" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
-                            Usage
-                        </a>
-                    </li>
-                    <li class="d-flex">
-                        <a href="#usage-le-plus-simple" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
-                            Usage le plus simple
-                        </a>
-                    </li>
-                    <li class="d-flex">
-                        <a href="#langue-personnalise" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
-                            Langue personnalisée
-                        </a>
-                    </li>
-                    <li class="d-flex">
-                        <a href="#mthode-update" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
-                            Méthode update
-                        </a>
-                    </li>
-                    <li class="d-flex">
-                        <a href="#mthode-getlanguagestring" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
-                            Méthode getLanguageString
-                        </a>
-                    </li>
-                    <li class="d-flex">
-                        <a href="#mthode-reset" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
-                            Méthode reset
-                        </a>
-                    </li></ol>
+                    <ol class="cgap-3em | m-0 pl-0 pb-5 o-auto | lh-1 | ls-none bwidth-1 bstyle-dashed bcolor-neutral-500 btwidth-0 brwidth-0" d-flex="xs,sm" fd-column="xs,sm" fw-wrap="xs,sm" columns-3="md" columns-2="sm" maxh-300px="sm" maxh-200px="xs">
+                        <li class="d-flex">
+                            <a href="#installation" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
+                                Installation
+                            </a>
+                        </li>
+                        <li class="d-flex">
+                            <a href="#en-local" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
+                                En local
+                            </a>
+                        </li>
+                        <li class="d-flex">
+                            <a href="#sur-cdn" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
+                                Sur CDN
+                            </a>
+                        </li>
+                        <li class="d-flex">
+                            <a href="#usage" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
+                                Usage
+                            </a>
+                        </li>
+                        <li class="d-flex">
+                            <a href="#usage-le-plus-simple" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
+                                Usage le plus simple
+                            </a>
+                        </li>
+                        <li class="d-flex">
+                            <a href="#langue-personnalise" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
+                                Langue personnalisée
+                            </a>
+                        </li>
+                        <li class="d-flex">
+                            <a href="#mthode-update" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
+                                Méthode update
+                            </a>
+                        </li>
+                        <li class="d-flex">
+                            <a href="#mthode-getlanguagestring" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
+                                Méthode getLanguageString
+                            </a>
+                        </li>
+                        <li class="d-flex">
+                            <a href="#mthode-reset" class="pl-5 pt-1 pb-1 | fs-4 lsp-3 lh-5 fvs-wght-400 | blwidth-1 blstyle-dashed bcolor-neutral-500">
+                                Méthode reset
+                            </a>
+                        </li></ol>
                     </details>
                 
             </header>
-            <p><a href="https://github.com/ita-design-system/c-preview.js/releases"><img src="/c-preview.js/c-preview-CK37FOo4Nw-__145__.svg" alt="GitHub release (latest by date)" loading="lazy" decoding="async" width="145" height="28"></a></p>
-<aside class="d-flex | sandbox" fd-column="xs,sm" gap-2="xs,sm" ai-start="xs,sm" o-hidden="md" pl-9="md" pr-9="md" pl-5="xs,sm" pr-5="xs,sm">
+            <aside class="d-flex | sandbox" fd-column="xs,sm" gap-2="xs,sm" ai-start="xs,sm" o-hidden="md" pl-9="md" pr-9="md" pl-5="xs,sm" pr-5="xs,sm">
 <div class="d-flex | p-1 | bc-primary-200 brad-2" d-none="md">
 <button type="button" class="d-flex | pt-2 pb-2 pl-5 pr-5 | fvs-wght-400 fs-2 tt-uppercase | c-primary-900 bc-0 b-0 cur-pointer | sandbox__tab" data-name="code">
 Code
@@ -434,8 +465,8 @@ Démo c-preview.js
 &lt;/html&gt;</code>
 </pre>
 <div class="d-flex jc-center ai-center | pos-absolute top-0 left-0 | w-100 h-100 | sandbox__enable_wrapper" style="background-color: rgba(0,0,0,0.5)">
-<input type="checkbox" id="W8fvp5pV_code" value="" class="pos-absolute | opa-0 | sandbox__enable_switch" checked="">
-<label for="W8fvp5pV_code" class="d-flex ai-center gap-1 | p-5 | fvs-wght-500 tt-uppercase | bc-neutral-900 brad-2 cur-pointer">
+<input type="checkbox" id="SZG0ij0Z_code" value="" class="pos-absolute | opa-0 | sandbox__enable_switch">
+<label for="SZG0ij0Z_code" class="d-flex ai-center gap-1 | p-5 | fvs-wght-500 tt-uppercase | bc-neutral-900 brad-2 cur-pointer">
 <span class="icon-play"></span>
 Activer
 </label>
@@ -453,7 +484,7 @@ Activer
 <span class="fvs-wght-400 | c-neutral-300">Ouvrir</span>
 <span class="icon-arrow-square-out c-neutral-500"></span>
 </a>
-<div class="d-flex gap-5">
+<div class="d-flex gap-7">
 <button type="button" class="d-flex ai-center | p-0 | fvs-wght-400 fs-2 tt-uppercase | bc-0 c-neutral-300 b-0 cur-pointer | sandbox__reload">
 <span class="o-hidden | to-ellipsis ws-nowrap">Recharger</span>
 </button>
@@ -465,8 +496,8 @@ Activer
 <div class="d-flex | pos-relative">
 <iframe src="/c-preview.js/sandboxes/1/" loading="lazy" class="w-100 h-500px | b-0 bc-neutral-100 | sandbox__iframe"></iframe>
 <div class="d-flex jc-center ai-center | pos-absolute top-0 left-0 | w-100 h-100 | sandbox__enable_wrapper" style="background-color: rgba(0,0,0,0.5)">
-<input type="checkbox" id="W8fvp5pV_iframe" value="" class="pos-absolute | opa-0 | sandbox__enable_switch" checked="">
-<label for="W8fvp5pV_iframe" class="d-flex ai-center gap-1 | p-5 | fvs-wght-500 tt-uppercase | bc-neutral-900 brad-2 cur-pointer">
+<input type="checkbox" id="SZG0ij0Z_iframe" value="" class="pos-absolute | opa-0 | sandbox__enable_switch">
+<label for="SZG0ij0Z_iframe" class="d-flex ai-center gap-1 | p-5 | fvs-wght-500 tt-uppercase | bc-neutral-900 brad-2 cur-pointer">
 <span class="icon-play"></span> Activer
 </label>
 </div>
@@ -478,27 +509,27 @@ Activer
 </div>
 </aside>
 
-                    <h2 id="installation" pl-9="xs,sm">
-                        <a href="#installation" title="Installation" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1" ml-3="xs,sm">
-                            <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
-                        </a>
-                Installation</h2>
+                        <h2 id="installation" pl-9="xs,sm">
+                            <a href="#installation" title="Installation" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1 __soft-shadow" ml-3="xs,sm">
+                                <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
+                            </a>
+                    Installation</h2>
 <p>Il est recommandé de placer les fichiers dans cet ordre avant la balise fin de body.</p>
 
-                    <h3 id="en-local" pl-9="xs,sm">
-                        <a href="#en-local" title="En local" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1" ml-3="xs,sm">
-                            <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
-                        </a>
-                En local</h3>
+                        <h3 id="en-local" pl-9="xs,sm">
+                            <a href="#en-local" title="En local" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1 __soft-shadow" ml-3="xs,sm">
+                                <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
+                            </a>
+                    En local</h3>
 <pre><code class="language-html">&lt;script src=&quot;/path/to/c-preview-i18n.js&quot;&gt;&lt;/script&gt; &lt;!-- optionnel --&gt;
 &lt;script src=&quot;/path/to/c-preview.js&quot;&gt;&lt;/script&gt; &lt;!-- obligatoire --
 </code></pre>
 
-                    <h3 id="sur-cdn" pl-9="xs,sm">
-                        <a href="#sur-cdn" title="Sur CDN" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1" ml-3="xs,sm">
-                            <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
-                        </a>
-                Sur CDN</h3>
+                        <h3 id="sur-cdn" pl-9="xs,sm">
+                            <a href="#sur-cdn" title="Sur CDN" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1 __soft-shadow" ml-3="xs,sm">
+                                <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
+                            </a>
+                    Sur CDN</h3>
 <p>Via <a href="https://www.jsdelivr.com/">https://www.jsdelivr.com/</a></p>
 <pre><code class="language-html">&lt;!-- Version la plus récente --&gt;
 https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js/ui/js/c-preview.js
@@ -517,18 +548,18 @@ https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@v0.1.0/ui/js/c-previe
 https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@v0.1.0/ui/js/c-preview.min.js
 </code></pre>
 
-                    <h2 id="usage" pl-9="xs,sm">
-                        <a href="#usage" title="Usage" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1" ml-3="xs,sm">
-                            <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
-                        </a>
-                Usage</h2>
+                        <h2 id="usage" pl-9="xs,sm">
+                            <a href="#usage" title="Usage" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1 __soft-shadow" ml-3="xs,sm">
+                                <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
+                            </a>
+                    Usage</h2>
 <p>Il suffit d'ajouter n'importe où dans le document un élément HTML avec l'attribut <code>data-cpreview=&quot;ID_INPUT_FILE&quot;</code> <strong>dont la valeur correspond à l'id de l&quot;input file</strong>.</p>
 
-                    <h3 id="usage-le-plus-simple" pl-9="xs,sm">
-                        <a href="#usage-le-plus-simple" title="Usage le plus simple" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1" ml-3="xs,sm">
-                            <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
-                        </a>
-                Usage le plus simple</h3>
+                        <h3 id="usage-le-plus-simple" pl-9="xs,sm">
+                            <a href="#usage-le-plus-simple" title="Usage le plus simple" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1 __soft-shadow" ml-3="xs,sm">
+                                <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
+                            </a>
+                    Usage le plus simple</h3>
 <p>Exemple d'usage le plus simple, cPreview peut gérer plusieurs instances.</p>
 <pre><code class="language-html">&lt;input type=&quot;file&quot; id=&quot;first&quot; multiple&gt;
 &lt;div data-cpreview=&quot;first&quot;&gt;&lt;/div&gt;
@@ -537,11 +568,11 @@ https://cdn.jsdelivr.net/gh/ita-design-system/c-preview.js@v0.1.0/ui/js/c-previe
 &lt;div data-cpreview=&quot;second&quot;&gt;&lt;/div&gt;
 </code></pre>
 
-                    <h3 id="langue-personnalise" pl-9="xs,sm">
-                        <a href="#langue-personnalise" title="Langue personnalisée" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1" ml-3="xs,sm">
-                            <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
-                        </a>
-                Langue personnalisée</h3>
+                        <h3 id="langue-personnalise" pl-9="xs,sm">
+                            <a href="#langue-personnalise" title="Langue personnalisée" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1 __soft-shadow" ml-3="xs,sm">
+                                <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
+                            </a>
+                    Langue personnalisée</h3>
 <p>Exemple avec langue personnalisée pour l'interface</p>
 <pre><code class="language-html">&lt;input type=&quot;file&quot; id=&quot;first&quot; multiple&gt;
 &lt;div data-cpreview=&quot;first&quot; data-cpreview-i18n=&quot;fr&quot;&gt;&lt;/div&gt;
@@ -587,20 +618,20 @@ const cPreviewI18n = {
 }
 </code></pre>
 
-                    <h2 id="mthode-update" pl-9="xs,sm">
-                        <a href="#mthode-update" title="Méthode update" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1" ml-3="xs,sm">
-                            <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
-                        </a>
-                Méthode update</h2>
+                        <h2 id="mthode-update" pl-9="xs,sm">
+                            <a href="#mthode-update" title="Méthode update" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1 __soft-shadow" ml-3="xs,sm">
+                                <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
+                            </a>
+                    Méthode update</h2>
 <p>Démarre et met à jour les input type file éligibles, c'est à dire dont l'id est couplé avec un élément HTML <code>data-cpreview=&quot;ID_INPUT_FILE&quot;</code></p>
 <pre><code class="language-javascript">cPreview.update();
 </code></pre>
 
-                    <h2 id="mthode-getlanguagestring" pl-9="xs,sm">
-                        <a href="#mthode-getlanguagestring" title="Méthode getLanguageString" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1" ml-3="xs,sm">
-                            <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
-                        </a>
-                Méthode getLanguageString</h2>
+                        <h2 id="mthode-getlanguagestring" pl-9="xs,sm">
+                            <a href="#mthode-getlanguagestring" title="Méthode getLanguageString" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1 __soft-shadow" ml-3="xs,sm">
+                                <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
+                            </a>
+                    Méthode getLanguageString</h2>
 <p>À partir de la clé spécifiée, retourne la chaîne de traduction. Les clés sont disponibles dans le fichier optionnel <code>c-preview-i18n.js</code>.</p>
 <pre><code class="language-javascript">/**
  * OPTIONAL LANGUAGE STRING METHOD
@@ -615,11 +646,11 @@ cPreview.getLanguageString('file_name', 'fr'); // &quot;Nom du fichier&quot;
 cPreview.getLanguageString('file_name', 'en'); // &quot;File name&quot;
 </code></pre>
 
-                    <h2 id="mthode-reset" pl-9="xs,sm">
-                        <a href="#mthode-reset" title="Méthode reset" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1" ml-3="xs,sm">
-                            <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
-                        </a>
-                Méthode reset</h2>
+                        <h2 id="mthode-reset" pl-9="xs,sm">
+                            <a href="#mthode-reset" title="Méthode reset" class="pos-absolute top-50 left-0 t-tY-50 | p-4 ml-1 | td-none | brad-4 bc-neutral-100 bwidth-1 bstyle-dashed bcolor-neutral-500 __hover-1 __soft-shadow" ml-3="xs,sm">
+                                <span class="icon-link-simple | pos-absolute top-50 left-50 t-tY-50 t-tX-50 | fs-4"></span>
+                            </a>
+                    Méthode reset</h2>
 <p>Retire tous les fichiers de l'input type file spécifié</p>
 <pre><code class="language-javascript">/**
  * RESET METHOD
@@ -629,11 +660,11 @@ cPreview.getLanguageString('file_name', 'en'); // &quot;File name&quot;
 cPreview.reset(input_id);
 </code></pre>
 
-            <footer class="minh-100vh">
+            <footer class="minh-100vh mt-10">
                 <div class="pt-11 | bwidth-1 bstyle-dashed bcolor-neutral-500 btwidth-0 brwidth-0"></div>
                 <p class="mt-5 mb-0 | fs-2">
                     <a href="https://github.com/ita-design-system/eleventy-libdoc" target="_blank" class="td-none">
-                        11ty LibDoc 0.1.0
+                        11ty LibDoc 0.3.0
                     </a>
                 </p>
             </footer>
