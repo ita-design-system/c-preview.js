@@ -44,6 +44,9 @@ export default {
                     const filename = src.split('/').slice(-1)[0].split('.')[0];
                     return `${libdocUtils.slugify(filename)}-${id}-__${width}__.${format}`;
                 },
+                sharpOptions: {
+                    animated: true
+                },
                 // transform: (sharp) => {
                 //     sharp.trim();
                 // },
@@ -106,6 +109,13 @@ export default {
             content = content.replaceAll(`<p><aside`, `<aside`);
             content = content.replaceAll(`</aside></p>`, `</aside>`);
             return content;
+        },
+        datePrefixText: async function(date) {
+            let text = '';
+            if (typeof date == 'string') {
+                text = libdocMessages.lastModified[libdocConfig.lang];
+            }
+            return text;
         },
         dateString: async function(content) {
             let theDay = content.getDate().toString();
