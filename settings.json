@@ -19,7 +19,6 @@
     "blogDescription": "Description du blog",
     "blogAuthor": "c-preview.js Team",
     "blogSlug": "blog",
-    "htmlBasePathPrefix": "/c-preview.js/",
     "hljsLanguages": [
         "xml",
         "javascript",
